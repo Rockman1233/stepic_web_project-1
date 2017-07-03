@@ -1,14 +1,15 @@
 server {
-	listen	80;
+	listen	80 default_server;
+
+	root /home/box/web;
+
+	server_name *;
 
 	location ^~ /uploads/ {
-		root /home/box/web;
+		root /home/box/web/uploads;
 	}
 	location ~* ^.+\.\w+$ {
-		root /home/box/web/public;
-	}
-	location /hello/ {
-		root http://0.0.0.0:8080;
+		root	/home/box/web/public;
 	}
 	location / {                                                   
         return 404;
