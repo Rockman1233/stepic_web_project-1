@@ -15,14 +15,15 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from qa.urls import views
 
 urlpatterns = [
 	url(r'^admin/', admin.site.urls),
-	url(r'^$', include('qa.urls')),
-	url(r'^login/', include('qa.urls')),
-	url(r'^signup/', include('qa.urls')),
-	url(r'^question/(?P<id>\d+)/', include('qa.urls')),
-	url(r'^ask/', include('qa.urls')),
-	url(r'^popular/', include('qa.urls')),
-	url(r'^new/', include('qa.urls')),
+	url(r'^$', views.test, name='test'),
+	url(r'^login/', views.test, name='test'),
+	url(r'^signup/', views.test, name='test'),
+	url(r'^question/(?P<id>\d+)/', views.test, name='test'),
+	url(r'^ask/', views.test, name='test'),
+	url(r'^popular/', views.test, name='test'),
+	url(r'^new/', views.test, name='test'),
 ]
