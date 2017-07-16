@@ -4,6 +4,7 @@ sudo /etc/init.d/nginx restart
 sudo ln -s /home/box/web/etc/gunicorn.conf /etc/gunicorn.d/test
 sudo ln -s /home/box/web/etc/gunicorndjango.conf /etc/gunicorn.d/testdj
 sudo /etc/init.d/gunicorn restart
-#sudo gunicorn -c /home/box/web/etc/gunicorn.conf hello:app
-#sudo gunicorn -c /home/box/web/etc/gunicorn_django.conf ask.wsgi:application
 sudo /etc/init.d/mysql start
+mysql -uroot -e "CREATE DATABASE qabase;"
+mysql -uroot -e "CREATE USER 'qauser'@'localhost' IDENTIFIED BY '123456';"
+mysql -uroot -e "GRANT ALL ON qabase.* TO 'qauser'@'localhost';"
