@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-class QuestionManager(models.Model):
+class QuestionManager(models.Manager):
 	def new():
 		pass
 	def popular():
