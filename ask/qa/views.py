@@ -30,8 +30,7 @@ def paginate(request, qs):
 	return page, paginator
 
 def mainpg(request):
-	qs = Question.objects.all()
-	qs = qs.order_by('-added_at')
+	qs = Question.objects.order_by('-id')
 	page, paginator = paginate(request, qs)
 	paginator.baseurl = reverse('mainpg')
 	return render(request, 'main.html', {
@@ -41,8 +40,7 @@ def mainpg(request):
 	})
 
 def popular(request):
-	qs = Question.objects.all()
-	qs = qs.order_by('-rating')
+	qs = Question.objects.order_by('-rating')
 	page, paginator = paginate(request, qs)
 	paginator.baseurl = reverse('popular') + '?page='
 	return render(request, 'popular.html', {

@@ -22,7 +22,7 @@ class Question(models.Model):
 	likes = models.ManyToManyField(User,related_name="q_to_likes")
 	
 	def get_absolute_url(self):
-		return reverse('question_detail', kwargs={'pk': self.pk})
+		return reverse('question', kwargs={'pk': self.pk})
 
 class Answer(models.Model):
 	text = models.TextField(default="")
