@@ -5,7 +5,6 @@ from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage
 from django.core.urlresolvers import reverse
 from qa.models import Question
-from qa.forms import AskForm, AnswerForm, LoginForm, SignupForm
 
 # Create your views here.
 
@@ -32,7 +31,7 @@ def paginate(request, qs):
 
 def mainpg(request):
 	qs = Question.objects.all()
-	qs = qs.order_by("-added_at')
+	qs = qs.order_by('-added_at')
 	page, paginator = paginate(request, qs)
 	paginator.baseurl = reverse('mainpg')
 	return render(request, 'main.html', {
