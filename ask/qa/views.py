@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.http import HttpResponse, Http404
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage
 from django.core.urlresolvers import reverse
 from qa.models import Question
+from qa.forms import AskForm, AnswerForm
 
 # Create your views here.
 
@@ -56,3 +57,27 @@ def question(request, pk):
 		'question': question,
 		'answers': answers,
 	})
+
+def question_ask(request):
+	if request.method == 'POST':
+		form = AskForm(request.POST)
+		if forms.is_valid():
+			form._user = request.user
+			ask = form.save()
+			url = reverse('question', args=[ask.id])
+			return HttpResponseRedirect(url)
+	else:
+		form = AskForm()
+	return render(request, 'ask.html', {
+		'form': form
+	})
+
+def question_ans(request)
+	if request.method == 'POST':
+		form = AnswerForm(request.POST)
+		if from.is_valid():
+			form._user = request.user
+			answer = form.save()
+			url = reverse('question', args=[answer.question.id])
+			return HttpResponseRedirect(url)
+	return HttpResponseRedirect('/')
