@@ -6,6 +6,7 @@ from django.core.paginator import Paginator, EmptyPage
 from django.core.urlresolvers import reverse
 from qa.models import Question
 from qa.forms import AskForm, AnswerForm
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -50,21 +51,25 @@ def popular(request):
 		'paginator': paginator,
 	})
 
+@csrf_exempt
 def question(request, pk):
 	question = get_object_or_404(Question, id=pk)
 	answers = question.answer_set.all()
+	form = AnswerForm(initial={'question': str(pk)})
 	return render(request, 'question.html', {
 		'question': question,
 		'answers': answers,
+		'form': form,
 	})
 
+@csrf_exempt
 def question_ask(request):
 	if request.method == 'POST':
 		form = AskForm(request.POST)
-		if forms.is_valid():
+		if form.is_valid():
 			form._user = request.user
 			ask = form.save()
-			url = reverse('question', args=[ask.id])
+			url = reverse('question', args=[ask.question.id])
 			return HttpResponseRedirect(url)
 	else:
 		form = AskForm()
@@ -72,10 +77,11 @@ def question_ask(request):
 		'form': form
 	})
 
-def question_ans(request)
+@csrf_exempt
+def question_ans(request):
 	if request.method == 'POST':
 		form = AnswerForm(request.POST)
-		if from.is_valid():
+		if form.is_valid():
 			form._user = request.user
 			answer = form.save()
 			url = reverse('question', args=[answer.question.id])
