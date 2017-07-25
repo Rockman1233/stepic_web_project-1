@@ -69,7 +69,7 @@ def question_ask(request):
 		if form.is_valid():
 			form._user = request.user
 			ask = form.save()
-			url = reverse('question', args=[ask.question.id])
+			url = ask.get_url()
 			return HttpResponseRedirect(url)
 	else:
 		form = AskForm()
@@ -84,6 +84,6 @@ def question_ans(request):
 		if form.is_valid():
 			form._user = request.user
 			answer = form.save()
-			url = reverse('question', args=[answer.question.id])
+			url = answer.get_url()
 			return HttpResponseRedirect(url)
 	return HttpResponseRedirect('/')

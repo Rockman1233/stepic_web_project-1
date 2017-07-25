@@ -7,8 +7,6 @@ from qa.models import Question, Answer
 class AskForm(forms.Form):
 	title = forms.CharField(max_length=255)
 	text = forms.CharField(widget=forms.Textarea)
-	title = forms.CharField(max_length=100)
-	text = forms.CharField(widget=forms.Textarea)
 	def clean(self):
 		pass
 	def save(self):
@@ -25,14 +23,12 @@ class AnswerForm(forms.Form):
 		try:
 			question = Question.objects.get(id=question_id)
 		except Question.DoesNotExist:
-		question = None
+			question = None
 		return question
-
-    def clean(self):
-        pass
-
-    def save(self):
-        answer = Answer(**self.cleaned_data)
-        answer.author_id = self._user.id
-        answer.save()
-        return answer
+	def clean(self):
+		pass
+	def save(self):
+		answer = Answer(**self.cleaned_data)
+		answer.author_id = self._user.id
+		answer.save()
+		return answer
