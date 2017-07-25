@@ -7,44 +7,32 @@ from qa.models import Question, Answer
 class AskForm(forms.Form):
 	title = forms.CharField(max_length=255)
 	text = forms.CharField(widget=forms.Textarea)
-	def clean_title(self):
-		title = self.cleaned_data['title']
-		if title.strip() == '':
-			raise forms.ValidationError(u'Title is empty', code='validation_error')
-		return title
-	def clean_text(self):
-		text = self.cleaned_data['text']
-		if text.strip() == '':
-			raise forms.ValidationError(u'Title is empty', code='validation_error')
-		return text
+	title = forms.CharField(max_length=100)
+	text = forms.CharField(widget=forms.Textarea)
+	def clean(self):
+		pass
 	def save(self):
-		if self._user.is_anonymous():
-			self.cleaned_data['author_id'] = 1
-		else:
-			self.cleaned_data['author'] = self._user
 		ask = Question(**self.cleaned_data)
+		ask.author_id = self._user.id
 		ask.save()
 		return ask
 
 class AnswerForm(forms.Form):
 	text = forms.CharField(widget=forms.Textarea)
 	question = forms.IntegerField(widget=forms.HiddenInput)
-	def clean_text(self):
-		text = self.cleaned_data['text']
-		if text.strip() == '':
-			raise forms.ValidationError(u'Text is empty', code='validation_error')
-		return text
 	def clean_question(self):
-		question = self.cleaned_data['question']
-		if question == 0:
-			raise forms.ValidationError(u'Question number incorrect', code='validation_error')
+		question_id = self.cleaned_data['question']
+		try:
+			question = Question.objects.get(id=question_id)
+		except Question.DoesNotExist:
+		question = None
 		return question
-	def save(self):
-		self.cleaned_data['question'] = get_object_or_404(Question, pk=self.cleaned_data['question'])
-		if self._user.is_anonymous():
-			self.cleaned_data['author_id'] = 1
-		else:
-			self.cleaned_data['author'] = self._user
-		answer = Answer(**self.cleaned_data)
-		answer.save()
-		return answer
+
+    def clean(self):
+        pass
+
+    def save(self):
+        answer = Answer(**self.cleaned_data)
+        answer.author_id = self._user.id
+        answer.save()
+        return answer
